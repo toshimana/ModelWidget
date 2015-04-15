@@ -1,0 +1,12 @@
+#ifndef MODELWIDGET_GLOBAL_H
+#define MODELWIDGET_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#ifdef MODELWIDGET_LIB
+# define MODELWIDGET_EXPORT Q_DECL_EXPORT
+#else
+# define MODELWIDGET_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // MODELWIDGET_GLOBAL_H
