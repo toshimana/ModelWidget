@@ -6,6 +6,7 @@ struct ModelWidget::Impl
 {
 	SpVertices vertices;
 	SpColors   colors;
+	SpMeshes   meshes;
 
 	GLenum drawMode;
 
@@ -57,23 +58,8 @@ ModelWidget::setColors( const SpColors& colors )
 void 
 ModelWidget::setMeshes( const SpMeshes& meshes )
 {
-	SpVertices vertices = std::make_shared<Vertices>();
-	SpColors   colors = std::make_shared<Colors>();
-	vertices->reserve( meshes->size() * 3 );
-	colors->reserve( meshes->size() * 3 );
-
-	for ( auto it = meshes->begin(); it != meshes->end(); ++it ) {
-		cv::Vec3i mesh = *it;
-		for ( int i = 0; i < 3; ++i ) {
-			int index = mesh[i];
-			vertices->push_back( mImpl->vertices->at( index ) );
-			colors->push_back( mImpl->colors->at( index ) );
-		}
-	}
-
-	mImpl->vertices = vertices;
-	mImpl->colors = colors;
-	mImpl->drawMode = GL_POLYGON;
+	mImpl->meshes = meshes;
+	mImpl->drawMode = GL_TRIANGLES;
 }
 
 void
@@ -98,14 +84,36 @@ ModelWidget::paintGL( void )
 
 	glColor3f( 1.0f, 1.0f, 1.0f );
 
-	if ( mImpl->vertices ) {
-		glEnableClientState( GL_VERTEX_ARRAY );
-		if ( mImpl->colors ) glEnableClientState( GL_COLOR_ARRAY );
+	switch ( mImpl->drawMode ){
+	case GL_POINTS:{
+		if ( mImpl->vertices ) {
+			glEnableClientState( GL_VERTEX_ARRAY );
+			if ( mImpl->colors ) glEnableClientState( GL_COLOR_ARRAY );
 
-		glVertexPointer( 3, GL_FLOAT, 0, mImpl->vertices->data() );
-		if ( mImpl->colors ) glColorPointer( 3, GL_UNSIGNED_BYTE, 0, mImpl->colors->data() );
+			glVertexPointer( 3, GL_FLOAT, 0, mImpl->vertices->data() );
+			if ( mImpl->colors ) glColorPointer( 3, GL_UNSIGNED_BYTE, 0, mImpl->colors->data() );
 
-		glDrawArrays( mImpl->drawMode, 0, mImpl->vertices->size() );
+			glDrawArrays( mImpl->drawMode, 0, mImpl->vertices->size() );
+
+			if ( mImpl->colors) glDisableClientState( GL_COLOR_ARRAY );
+			glDisableClientState( GL_VERTEX_ARRAY );
+		}
+	} break;
+
+	case GL_TRIANGLES: {
+		if ( mImpl->vertices ) {
+			glEnableClientState( GL_VERTEX_ARRAY );
+			if ( mImpl->colors ) glEnableClientState( GL_COLOR_ARRAY );
+
+			glVertexPointer( 3, GL_FLOAT, 0, mImpl->vertices->data() );
+			if ( mImpl->colors ) glColorPointer( 3, GL_UNSIGNED_BYTE, 0, mImpl->colors->data() );
+
+			glDrawElements( mImpl->drawMode, 6, GL_UNSIGNED_INT, mImpl->meshes->data() );
+
+			if ( mImpl->colors) glDisableClientState( GL_COLOR_ARRAY );
+			glDisableClientState( GL_VERTEX_ARRAY );
+		}
+	} break;
 	}
 
 

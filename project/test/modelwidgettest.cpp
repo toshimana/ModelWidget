@@ -56,13 +56,14 @@ ModelWidgetTest::testMesh()
 	vertices->push_back( cv::Point3f( 0.0f, 0.0f, 0.0f ) );
 	vertices->push_back( cv::Point3f( 0.5f, 0.0f, 0.0f ) );
 	vertices->push_back( cv::Point3f( 0.5f, 0.5f, 0.0f ) );
-	vertices->push_back( cv::Point3f( 0.5f, 0.5f, 0.0f ) );
+	vertices->push_back( cv::Point3f( 0.0f, 0.5f, 0.0f ) );
 
 	SpColors colors = std::make_shared<Colors>();
-	colors->push_back( cv::Vec3b( 255, 0, 0 ) ); // BGR
-	colors->push_back( cv::Vec3b( 255, 0, 0 ) ); // BGR
-	colors->push_back( cv::Vec3b( 255, 0, 0 ) ); // BGR
-	colors->push_back( cv::Vec3b( 255, 0, 0 ) ); // BGR
+	cv::Vec3b c( 255, 0, 0 );
+	colors->push_back( c ); // BGR
+	colors->push_back( c ); // BGR
+	colors->push_back( c ); // BGR
+	colors->push_back( c ); // BGR
 
 	SpMeshes meshes = std::make_shared<Meshes>();
 	meshes->push_back( cv::Vec3i( 0, 1, 2 ) );
@@ -75,7 +76,15 @@ ModelWidgetTest::testMesh()
 	QTest::qWait( 1 );
 	cv::Mat image = modelWidget->getImage();
 
-	cv::imshow( "test", image );
-	cv::waitKey();
+	int width  = modelWidget->width();
+	int height = modelWidget->height();
 
+#define check(x,y,color) QCOMPARE( image.at<cv::Vec3b>(y,x), color );
+
+	check(     width / 2,     height / 2 - 1, c );
+	check(     width / 2,     height / 4 ,    c );
+	check( 3 * width / 4 - 1, height / 4 ,    c );
+	check( 3 * width / 4 - 1, height / 2 - 1, c );
+
+#undef check
 }
