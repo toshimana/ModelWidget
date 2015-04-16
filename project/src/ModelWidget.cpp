@@ -84,38 +84,25 @@ ModelWidget::paintGL( void )
 
 	glColor3f( 1.0f, 1.0f, 1.0f );
 
-	switch ( mImpl->drawMode ){
-	case GL_POINTS:{
-		if ( mImpl->vertices ) {
-			glEnableClientState( GL_VERTEX_ARRAY );
-			if ( mImpl->colors ) glEnableClientState( GL_COLOR_ARRAY );
-
-			glVertexPointer( 3, GL_FLOAT, 0, mImpl->vertices->data() );
-			if ( mImpl->colors ) glColorPointer( 3, GL_UNSIGNED_BYTE, 0, mImpl->colors->data() );
-
-			glDrawArrays( mImpl->drawMode, 0, mImpl->vertices->size() );
-
-			if ( mImpl->colors) glDisableClientState( GL_COLOR_ARRAY );
-			glDisableClientState( GL_VERTEX_ARRAY );
+	if ( mImpl->vertices ) {
+		glEnableClientState( GL_VERTEX_ARRAY );
+		if ( mImpl->colors ) glEnableClientState( GL_COLOR_ARRAY );
+		
+		glVertexPointer( 3, GL_FLOAT, 0, mImpl->vertices->data() );
+		if ( mImpl->colors ) glColorPointer( 3, GL_UNSIGNED_BYTE, 0, mImpl->colors->data() );
+		
+		switch ( mImpl->drawMode ) {
+		case GL_POINTS:
+			glDrawArrays( mImpl->drawMode, 0, mImpl->vertices->size() ); 
+			break;
+		case GL_TRIANGLES:			
+			glDrawElements( mImpl->drawMode, 3 * mImpl->meshes->size(), GL_UNSIGNED_INT, mImpl->meshes->data() ); 
+			break;
 		}
-	} break;
-
-	case GL_TRIANGLES: {
-		if ( mImpl->vertices ) {
-			glEnableClientState( GL_VERTEX_ARRAY );
-			if ( mImpl->colors ) glEnableClientState( GL_COLOR_ARRAY );
-
-			glVertexPointer( 3, GL_FLOAT, 0, mImpl->vertices->data() );
-			if ( mImpl->colors ) glColorPointer( 3, GL_UNSIGNED_BYTE, 0, mImpl->colors->data() );
-
-			glDrawElements( mImpl->drawMode, 3*mImpl->meshes->size(), GL_UNSIGNED_INT, mImpl->meshes->data() );
-
-			if ( mImpl->colors) glDisableClientState( GL_COLOR_ARRAY );
-			glDisableClientState( GL_VERTEX_ARRAY );
-		}
-	} break;
+		
+		if ( mImpl->colors ) glDisableClientState( GL_COLOR_ARRAY );
+		glDisableClientState( GL_VERTEX_ARRAY );
 	}
-
 
 	glFlush();
 }
