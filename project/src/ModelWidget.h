@@ -35,6 +35,11 @@ protected:
 	void resizeGL( int, int );
 	void paintGL( void );
 
+	void mousePressEvent( QMouseEvent* event );
+	void mouseReleaseEvent( QMouseEvent* event );
+	void mouseMoveEvent( QMouseEvent* event );
+	void wheelEvent( QWheelEvent* event );	
+
 private:
 	struct Impl;
 	std::unique_ptr<Impl> mImpl;

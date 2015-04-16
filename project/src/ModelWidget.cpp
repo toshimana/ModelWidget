@@ -106,3 +106,23 @@ ModelWidget::paintGL( void )
 
 	glFlush();
 }
+
+void 
+ModelWidget::mousePressEvent( QMouseEvent* event )
+{
+}
+
+void 
+ModelWidget::mouseReleaseEvent( QMouseEvent* event )
+{
+}
+
+void 
+ModelWidget::mouseMoveEvent( QMouseEvent* event )
+{
+}
+
+void 
+ModelWidget::wheelEvent( QWheelEvent* event )
+{
+}
