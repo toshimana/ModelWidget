@@ -16,7 +16,8 @@ private slots :
     void initTestCase();
 	void testPointsNoColors();
 	void testPointsColors();
-	void testMesh();
+	void testMesh1();
+	void testMesh2();
 
 private:
 	std::shared_ptr<ModelWidget> modelWidget;

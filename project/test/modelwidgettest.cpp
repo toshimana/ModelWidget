@@ -50,7 +50,7 @@ ModelWidgetTest::testPointsColors()
 }
 
 void
-ModelWidgetTest::testMesh()
+ModelWidgetTest::testMesh1()
 {
 	SpVertices vertices = std::make_shared<Vertices>();
 	vertices->push_back( cv::Point3f( 0.0f, 0.0f, 0.0f ) );
@@ -81,10 +81,42 @@ ModelWidgetTest::testMesh()
 
 #define check(x,y,color) QCOMPARE( image.at<cv::Vec3b>(y,x), color );
 
-	check(     width / 2,     height / 2 - 1, c );
-	check(     width / 2,     height / 4 ,    c );
-	check( 3 * width / 4 - 1, height / 4 ,    c );
-	check( 3 * width / 4 - 1, height / 2 - 1, c );
+	check( 11*width/16,7*height/16-1, c );
+	check(  9*width/16,5*height/16-1, c );
+
+#undef check
+}
+
+void
+ModelWidgetTest::testMesh2()
+{
+	SpVertices vertices = std::make_shared<Vertices>();
+	vertices->push_back( cv::Point3f( 0.0f, 0.0f, 0.0f ) );
+	vertices->push_back( cv::Point3f( 0.5f, 0.0f, 0.0f ) );
+	vertices->push_back( cv::Point3f( 0.5f, 0.5f, 0.0f ) );
+
+	SpColors colors = std::make_shared<Colors>();
+	cv::Vec3b c( 255, 0, 0 );
+	colors->push_back( c ); // BGR
+	colors->push_back( c ); // BGR
+	colors->push_back( c ); // BGR
+
+	SpMeshes meshes = std::make_shared<Meshes>();
+	meshes->push_back( cv::Vec3i( 0, 1, 2 ) );
+
+	modelWidget->setVertices( vertices );
+	modelWidget->setColors( colors );
+	modelWidget->setMeshes( meshes );
+	modelWidget->repaint();
+	QTest::qWait( 1 );
+	cv::Mat image = modelWidget->getImage();
+
+	int width  = modelWidget->width();
+	int height = modelWidget->height();
+
+#define check(x,y,color) QCOMPARE( image.at<cv::Vec3b>(y,x), color );
+
+	check( 11*width/16,7*height/16-1, c );
 
 #undef check
 }

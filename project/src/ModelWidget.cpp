@@ -108,7 +108,7 @@ ModelWidget::paintGL( void )
 			glVertexPointer( 3, GL_FLOAT, 0, mImpl->vertices->data() );
 			if ( mImpl->colors ) glColorPointer( 3, GL_UNSIGNED_BYTE, 0, mImpl->colors->data() );
 
-			glDrawElements( mImpl->drawMode, 6, GL_UNSIGNED_INT, mImpl->meshes->data() );
+			glDrawElements( mImpl->drawMode, 3*mImpl->meshes->size(), GL_UNSIGNED_INT, mImpl->meshes->data() );
 
 			if ( mImpl->colors) glDisableClientState( GL_COLOR_ARRAY );
 			glDisableClientState( GL_VERTEX_ARRAY );
