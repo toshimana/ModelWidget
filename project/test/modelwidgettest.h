@@ -13,11 +13,10 @@ class ModelWidgetTest : public QObject
 public:
 
 private slots :
-    void initTestCase();
 	void testPointsNoColors();
 	void testPointsColors();
 	void testMesh1();
-	void testMesh2();
+	void testMeshNoColors();
 
 private:
 	std::shared_ptr<ModelWidget> modelWidget;

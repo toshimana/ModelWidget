@@ -8,16 +8,11 @@
 #include <opencv2/highgui/highgui.hpp>
 
 void 
-ModelWidgetTest::initTestCase()
+ModelWidgetTest::testPointsNoColors()
 {
 	modelWidget = std::make_shared<ModelWidget>();
 	modelWidget->show();
-}
 
-
-void 
-ModelWidgetTest::testPointsNoColors()
-{
 	SpVertices vertices = std::make_shared<Vertices>();
 	vertices->push_back( cv::Point3f( 0.0f, 0.0f, 0.0f ) );
 
@@ -32,6 +27,9 @@ ModelWidgetTest::testPointsNoColors()
 void 
 ModelWidgetTest::testPointsColors()
 {
+	modelWidget = std::make_shared<ModelWidget>();
+	modelWidget->show();
+
 	SpVertices vertices = std::make_shared<Vertices>();
 	vertices->push_back( cv::Point3f( 0.0f, 0.0f, 0.0f ) );
 
@@ -52,6 +50,9 @@ ModelWidgetTest::testPointsColors()
 void
 ModelWidgetTest::testMesh1()
 {
+	modelWidget = std::make_shared<ModelWidget>();
+	modelWidget->show();
+
 	SpVertices vertices = std::make_shared<Vertices>();
 	vertices->push_back( cv::Point3f( 0.0f, 0.0f, 0.0f ) );
 	vertices->push_back( cv::Point3f( 0.5f, 0.0f, 0.0f ) );
@@ -88,24 +89,20 @@ ModelWidgetTest::testMesh1()
 }
 
 void
-ModelWidgetTest::testMesh2()
+ModelWidgetTest::testMeshNoColors()
 {
+	modelWidget = std::make_shared<ModelWidget>();
+	modelWidget->show();
+
 	SpVertices vertices = std::make_shared<Vertices>();
 	vertices->push_back( cv::Point3f( 0.0f, 0.0f, 0.0f ) );
 	vertices->push_back( cv::Point3f( 0.5f, 0.0f, 0.0f ) );
 	vertices->push_back( cv::Point3f( 0.5f, 0.5f, 0.0f ) );
 
-	SpColors colors = std::make_shared<Colors>();
-	cv::Vec3b c( 255, 0, 0 );
-	colors->push_back( c ); // BGR
-	colors->push_back( c ); // BGR
-	colors->push_back( c ); // BGR
-
 	SpMeshes meshes = std::make_shared<Meshes>();
 	meshes->push_back( cv::Vec3i( 0, 1, 2 ) );
 
 	modelWidget->setVertices( vertices );
-	modelWidget->setColors( colors );
 	modelWidget->setMeshes( meshes );
 	modelWidget->repaint();
 	QTest::qWait( 1 );
@@ -116,7 +113,7 @@ ModelWidgetTest::testMesh2()
 
 #define check(x,y,color) QCOMPARE( image.at<cv::Vec3b>(y,x), color );
 
-	check( 11*width/16,7*height/16-1, c );
+	check( 11*width/16,7*height/16-1, cv::Vec3b(255,255,255) );
 
 #undef check
 }
