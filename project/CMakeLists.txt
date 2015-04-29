@@ -4,3 +4,4 @@ PROJECT( ModelWidget )
 
 ADD_SUBDIRECTORY( src )
 ADD_SUBDIRECTORY( test )
+ADD_SUBDIRECTORY( free )
